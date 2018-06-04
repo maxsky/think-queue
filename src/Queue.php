@@ -11,7 +11,7 @@
 
 namespace think;
 
-use Composer\Script\Event;
+use Composer\Installer\PackageEvent;
 use think\helper\Str;
 use think\queue\Connector;
 
@@ -50,7 +50,7 @@ class Queue {
     /**
      * The method will run when this package is installed. Please ignore this method.
      */
-    public static function postPackageInstall(Event $event) {
+    public static function postPackageInstall(PackageEvent $event) {
         $rootPath = __DIR__ . '/../../../../';
         if (is_dir($rootPath . 'config') && file_exists($rootPath . 'config/config.php')) {
             if (!is_dir($rootPath . 'config/extra')) {
