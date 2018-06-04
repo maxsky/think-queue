@@ -50,14 +50,15 @@ class Queue {
     /**
      * The method will run when this package is installed. Please ignore this method.
      */
-    public static function postPackageInstall(PackageEvent $event) {
+    public static function postPackageInstall() {
         $rootPath = __DIR__ . '/../../../../';
         if (is_dir($rootPath . 'config') && file_exists($rootPath . 'config/config.php')) {
             if (!is_dir($rootPath . 'config/extra')) {
                 if (!mkdir($rootPath . 'config/extra')) {
                     echo "Create config/extra folder failed, please create manually.\n";
                 }
-            } elseif (is_writable($rootPath . 'config/extra')) {
+            }
+            if (is_writable($rootPath . 'config/extra')) {
                 if (!file_exists($rootPath . 'config/extra/queue.php')) {
                     copy(__DIR__ . '/config.php', $rootPath . 'config/extra/queue.php');
                 } else {
