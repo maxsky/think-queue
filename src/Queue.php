@@ -11,8 +11,6 @@
 
 namespace think;
 
-use Composer\Script\Event;
-use Composer\Installer\InstallerEvent;
 use Composer\Installer\PackageEvent;
 use think\helper\Str;
 use think\queue\Connector;
@@ -52,7 +50,7 @@ class Queue {
     /**
      * The method will run when this package is installed. Please ignore this method.
      */
-    public static function postPackageInstall(Event $event) {
+    public static function postPackageInstall(PackageEvent $event) {
         $rootPath = $event->getComposer()->getConfig()->get('vendor-dir') . '/../';
         if (is_dir($rootPath . 'config') && file_exists($rootPath . 'config/config.php')) {
             if (!is_dir($rootPath . 'config/extra')) {
@@ -62,7 +60,8 @@ class Queue {
             }
             if (is_writable($rootPath . 'config/extra')) {
                 if (!file_exists($rootPath . 'config/extra/queue.php')) {
-                    copy(__DIR__ . '/config.php', $rootPath . 'config/extra/queue.php');
+                    copy($event->getOperation()->getPackage()->getName() . '/config.php',
+                        $rootPath . 'config/extra/queue.php');
                 } else {
                     echo "config/extra/quque.php already exist.\n";
                 }
@@ -76,7 +75,8 @@ class Queue {
                     echo "Create extra folder failed, please create manually.\n";
                 } elseif (is_writable($appPath . 'extra')) {
                     if (!file_exists($appPath . 'extra/queue.php')) {
-                        copy(__DIR__ . '/config.php', $appPath . 'extra/queue.php');
+                        copy($event->getOperation()->getPackage()->getName() . '/config.php',
+                            $appPath . 'extra/queue.php');
                     } else {
                         echo "extra/quque.php already exist.\n";
                     }
