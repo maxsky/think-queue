@@ -24,5 +24,8 @@
     "require": {
         "topthink/think-helper": ">=1.0.4",
         "topthink/think-installer": ">=1.0.10"
+    },
+    "extra": {
+        "queue": "src/config.php"
     }
 }
