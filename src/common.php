@@ -40,12 +40,12 @@ if (!function_exists('msectime')) {
      * 取毫秒级时间戳，默认返回普通秒级时间戳 time() 及 3 位长度毫秒字符串
      *
      * @param int  $msec_length 毫秒长度，默认 3
+     * @param int  $delay 是否延迟，传入延迟秒数，默认 0
      * @param int  $random_length 添加随机数长度，默认 0
      * @param bool $dot 随机是否存入小数点，默认 false
-     * @param int  $delay 是否延迟，传入延迟秒数，默认 0
      * @return string
      */
-    function msectime($msec_length = 3, $random_length = 0, $dot = false, $delay = 0) {
+    function msectime($msec_length = 3, $delay = 0, $random_length = 0, $dot = false) {
         list($msec, $sec) = explode(' ', microtime());
         $rand = $random_length > 0 ?
             number_format(

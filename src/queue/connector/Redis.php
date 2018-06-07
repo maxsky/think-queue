@@ -58,7 +58,7 @@ class Redis extends Connector {
 
     public function later($delay, $job, $data = '', $queue = null) {
         $payload = $this->createPayload($job, $data);
-        $msectime = msectime(7);
+        $msectime = msectime(7, $delay);
         return $this->redis->zAdd($this->getQueue($queue) . ':delayed', $msectime, $payload) ? $msectime : false;
     }
 
@@ -189,7 +189,7 @@ class Redis extends Connector {
      * 获取所有到期任务
      *
      * @param  string $from
-     * @param  string  $msectime
+     * @param  string $msectime
      * @return array
      */
     protected function getExpiredJobs($from, $msectime) {
@@ -200,7 +200,7 @@ class Redis extends Connector {
      * 删除过期任务
      *
      * @param  string $from
-     * @param  string  $msectime
+     * @param  string $msectime
      * @return void
      */
     protected function removeExpiredJobs($from, $msectime) {
