@@ -58,8 +58,8 @@ class Redis extends Connector {
 
     public function later($delay, $job, $data = '', $queue = null) {
         $payload = $this->createPayload($job, $data);
-        $time = time() + $delay;
-        return $this->redis->zAdd($this->getQueue($queue) . ':delayed', $time, $payload) ? $time : false;
+        $msectime = msectime(7);
+        return $this->redis->zAdd($this->getQueue($queue) . ':delayed', $msectime, $payload) ? $msectime : false;
     }
 
     /**
@@ -154,12 +154,14 @@ class Redis extends Connector {
     public function migrateExpiredJobs($from, $to, $attempt = true) {
         $this->redis->watch($from);
 
+        $msectime = msectime(7);
+
         $jobs = $this->getExpiredJobs(
-            $from, $time = time()
+            $from, $msectime
         );
         if (count($jobs) > 0) {
-            $this->transaction(function () use ($from, $to, $time, $jobs, $attempt) {
-                $this->removeExpiredJobs($from, $time);
+            $this->transaction(function () use ($from, $to, $msectime, $jobs, $attempt) {
+                $this->removeExpiredJobs($from, $msectime);
                 $this->pushExpiredJobsOntoNewQueue($to, $jobs, $attempt);
             });
         }
@@ -187,22 +189,22 @@ class Redis extends Connector {
      * 获取所有到期任务
      *
      * @param  string $from
-     * @param  int    $time
+     * @param  string  $msectime
      * @return array
      */
-    protected function getExpiredJobs($from, $time) {
-        return $this->redis->zRangeByScore($from, '-inf', $time);
+    protected function getExpiredJobs($from, $msectime) {
+        return $this->redis->zRangeByScore($from, '-inf', $msectime);
     }
 
     /**
      * 删除过期任务
      *
      * @param  string $from
-     * @param  int    $time
+     * @param  string  $msectime
      * @return void
      */
-    protected function removeExpiredJobs($from, $time) {
-        $this->redis->zRemRangeByScore($from, '-inf', $time);
+    protected function removeExpiredJobs($from, $msectime) {
+        $this->redis->zRemRangeByScore($from, '-inf', $msectime);
     }
 
     /**
