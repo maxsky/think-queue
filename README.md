@@ -1,4 +1,4 @@
-# think5-queue（官方名：think5-queue）
+# think5-queue（官方名：think-queue）
 
 ## 安装
 
@@ -186,7 +186,7 @@ php think queue:work --daemon
 也就是：
 
 ```php
-// 假设我们的任务叫 Job1，并且传了一个数组过去
+// 假设我们的任务类叫 Job1 并符合前文要求，项目为单模块，命名空间为 app\job，同时传了一个数组过去
 think\Queue::push('Job1', ['abc' => 123], 'testJob');
 ```
 
@@ -205,7 +205,7 @@ php think queue:work --queue testJob --daemon
 php think queue:work --queue testJob --queue default --queue xxxTask --daemon
 ```
 
-记得一定要在任务成功后删除任务，失败的任务最好在实际运用中记录起来
+接受到的数组可以根据具体业务完成相应操作。记得一定要在任务成功后删除任务，失败的任务最好在实际运用中记录下来。
 
 当然 Linux 服务器如 CentOS，安装 `Supervisor` 后可以在程序的配置文件里面添加日志记录。
 
