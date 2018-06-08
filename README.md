@@ -199,10 +199,10 @@ php think queue:work --queue testJob
 php think queue:work --queue testJob --daemon
 ```
 
-注意这只是监听单任务的命令，如果有多个队列需要同时监听，不用同时运行多条命令，这样就行：
+注意这只是监听单任务的命令，如果有多个队列需要同时监听，不用同时运行多条命令，这样就行（用逗号隔开任务）：
 
 ```bash
-php think queue:work --queue testJob --queue default --queue xxxTask --daemon
+php think queue:work --queue testJob,default,xxxTask --daemon
 ```
 
 接受到的数组可以根据具体业务完成相应操作。记得一定要在任务成功后删除任务，失败的任务最好在实际运用中记录下来。
